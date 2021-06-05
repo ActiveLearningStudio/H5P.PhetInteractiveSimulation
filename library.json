@@ -1,0 +1,20 @@
+{
+    "title": "PhET Interactive Simulation",
+    "description": "Add PhET Interactive Simulations",
+    "majorVersion": 1,
+    "minorVersion": 0,
+    "patchVersion": 0,
+    "runnable": 1,
+    "author": "Waqar Muneer",
+    "license": "AGPL-3.0",
+    "machineName": "H5P.PhetInteractiveSimulation",
+    "coreApi": {
+      "majorVersion": 1,
+      "minorVersion": 0
+    },
+    "embedTypes": ["div"],
+    "fullscreen": 1,
+    "preloadedJs": [
+      { "path": "phet-simulation.js" }
+    ]
+  }
