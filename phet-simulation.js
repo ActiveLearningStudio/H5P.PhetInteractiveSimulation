@@ -19,10 +19,15 @@ H5P.PhetInteractiveSimulation = (function($) {
     }
 
     PhetInteractiveSimulation.prototype.attach = function($container) {
-        this.container = $container;
-        var fileUrl = window.location.origin + "/sites/default/files/h5p/content/" + this.id + "/files/" + this.options.phetsimulation.path.split('/')[parseInt(this.options.phetsimulation.path.split('/').length - 1)];
-        $container.append('<iframe class="phetiframe" src="' + fileUrl + '"></iframe>');
-        this.trigger('resize');
+        if (Object.values(this.options).length === 0) {
+            $container.append('<h3>No simulation configured.</h3>');
+        } else if (this.options.phetSimulationFile) {
+            this.container = $container;
+            let isAbsoluteUrl = H5PIntegration.url.split('/').find(x => x === 'https:' || x === 'http:');
+            var fileUrl = (isAbsoluteUrl ? H5PIntegration.url : window.location.origin) + "/sites/default/files/h5p/content/" + this.id + "/" + this.options.phetSimulationFile.path;
+            $container.append('<iframe class="phetiframe" src="' + fileUrl + '"></iframe>');
+            this.trigger('resize');
+        }
     }
 
     return PhetInteractiveSimulation;
