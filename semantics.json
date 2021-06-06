@@ -1,6 +1,6 @@
 [
     {
-        "name": "phetsimulation",
+        "name": "phetSimulationFile",
         "type": "file",
         "label": "PhET Simulation File"
     }
