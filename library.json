@@ -6,7 +6,7 @@
     "patchVersion": 0,
     "runnable": 1,
     "author": "Waqar Muneer",
-    "license": "AGPL-3.0",
+    "license": "MIT",
     "machineName": "H5P.PhetInteractiveSimulation",
     "coreApi": {
       "majorVersion": 1,
@@ -15,6 +15,15 @@
     "embedTypes": ["div"],
     "fullscreen": 1,
     "preloadedJs": [
-      { "path": "phet-simulation.js" }
-    ]
+      { 
+        "path": "phet-simulation.js" 
+      }
+    ],
+    "editorDependencies": [
+      {
+        "machineName": "H5PEditor.ShowWhen",
+        "majorVersion": 1,
+        "minorVersion": 0
+      }
+    ] 
   }

@@ -6,7 +6,6 @@ H5P.PhetInteractiveSimulation = (function($) {
         var self = this;
         this.id = id;
         this.options = options;
-
         self.on('resize', function () {
             if (this.container) {
                 let width = H5P.jQuery(this.container).width();
@@ -19,13 +18,16 @@ H5P.PhetInteractiveSimulation = (function($) {
     }
 
     PhetInteractiveSimulation.prototype.attach = function($container) {
-        if (Object.values(this.options).length === 0) {
-            $container.append('<h3>No simulation configured.</h3>');
-        } else if (this.options.phetSimulationFile) {
-            this.container = $container;
-            let isAbsoluteUrl = H5PIntegration.url.split('/').find(x => x === 'https:' || x === 'http:');
-            var fileUrl = (isAbsoluteUrl ? H5PIntegration.url : window.location.origin) + "/sites/default/files/h5p/content/" + this.id + "/" + this.options.phetSimulationFile.path;
-            $container.append('<iframe class="phetiframe" src="' + fileUrl + '"></iframe>');
+        this.container = $container;
+        if (!Object.keys(this.options).find(field => field === 'phetSimulationFile' || field === 'phetSimulationUrl')) {
+            $container.append('<h3><strong>No simulation configured.</strong></h3>');
+        } else if (this.options.phetSimulationSource === 'url' && this.options.phetSimulationUrl) {
+            $container.append('<iframe class="phetiframe" src="' + this.options.phetSimulationUrl + '"></iframe>');
+            this.trigger('resize');
+        } else if (this.options.phetSimulationSource === 'file' && this.options.phetSimulationFile) {            
+            let hasAbsoluteUrl = H5PIntegration.url.split('/').find(x => x === 'https:' || x === 'http:');
+            var url = (hasAbsoluteUrl ? H5PIntegration.url : H5PIntegration.baseUrl + '/' + H5PIntegration.url) + "/content/" + this.id + "/" + this.options.phetSimulationFile.path;
+            $container.append('<iframe class="phetiframe" src="' + url + '"></iframe>');
             this.trigger('resize');
         }
     }
