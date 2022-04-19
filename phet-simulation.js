@@ -1,11 +1,14 @@
 var H5P = H5P || {};
 
-H5P.PhetInteractiveSimulation = (function($) {
+H5P.PhetInteractiveSimulation = (function(EventDispatcher, $) {
     
-    function PhetInteractiveSimulation(options, id) {
+    function PhetInteractiveSimulation(options, id, extras) {
         var self = this;
         this.id = id;
         this.options = options;
+        this.title = extras && extras.hasOwnProperty("metadata") && extras.metadata.hasOwnProperty("title") ? extras.metadata.title : 'PhET Interactive Simulation';
+        // Initialize event inheritance
+        EventDispatcher.call(self);
         self.on('resize', function () {
             if (this.container) {
                 let width = H5P.jQuery(this.container).width();
@@ -30,8 +33,36 @@ H5P.PhetInteractiveSimulation = (function($) {
             $container.append('<iframe class="phetiframe" src="' + url + '"></iframe>');
             this.trigger('resize');
         }
-    }
+
+        // trigger consumed
+        this.triggerConsumed();
+    };
+
+    /**
+     * Trigger the 'consumed' xAPI event when this commences
+     *
+     */
+    PhetInteractiveSimulation.prototype.triggerConsumed = function () {
+        var xAPIEvent = this.createXAPIEventTemplate({
+            id: 'http://activitystrea.ms/schema/1.0/consume',
+            display: {
+                'en-US': 'consumed'
+            }
+        }, {
+            result: {
+                completion: true
+            }
+        });
+
+        Object.assign(xAPIEvent.data.statement.object.definition, {
+            name: {
+                'en-US': this.title
+            }
+        });
+
+        this.trigger(xAPIEvent);
+    };
 
     return PhetInteractiveSimulation;
 
-})(H5P.jQuery);
+})(H5P.EventDispatcher, H5P.jQuery);
